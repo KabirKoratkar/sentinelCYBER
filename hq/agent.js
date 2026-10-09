@@ -1,3 +1,4 @@
+try { process.loadEnvFile(require("path").join(__dirname, "..", ".env")); } catch {}
 // HQ agent — autonomous. Watches HQ for a cross-app attack pattern, then:
 //   detect -> generate guard patch -> self-verify -> Semgrep scan ->
 //   open PR (gh) -> hot-deploy to the library -> re-verify the attacks fail.

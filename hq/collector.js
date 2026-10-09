@@ -1,3 +1,4 @@
+try { process.loadEnvFile(require("path").join(__dirname, "..", ".env")); } catch {}
 // HQ collector: receives scout reports, labels attacks, stores to ClickHouse,
 // serves the live dashboard + a tiny API the agent reads.
 const http = require("http");
