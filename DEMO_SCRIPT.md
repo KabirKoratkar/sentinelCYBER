@@ -1,17 +1,17 @@
-# Sentinel — demo script (~3 min)
+# Cascade — demo script (~3 min)
 
 A spoken script for the live demo / recorded video. Stage directions in
 *(italics)*. Have the site open and freshly **Reset** before you start.
 
 Live site: the trycloudflare URL (keep the tunnel terminal open).
-Repo: https://github.com/KabirKoratkar/sentinel
+Repo: https://github.com/KabirKoratkar/cascade
 
 ---
 
 ## 0:00 — Hook (15s)
 > "When a popular open-source library has a vulnerability, the maintainer is
 > flying blind. They can't see how their code is used in the wild, or that it's
-> being attacked, until it's already a headline. Think Log4Shell. Sentinel fixes
+> being attacked, until it's already a headline. Think Log4Shell. Cascade fixes
 > that blind spot."
 
 ## 0:15 — The setup (20s)
@@ -72,7 +72,7 @@ stack of agent-opened PRs #2 through #6, all green.)*
 ## 2:40 — Close (20s)
 > "Today it's three apps in a demo. In the real world it's the thousands of
 > apps that depend on one library, and that live risk signal is something a
-> cyber-insurer could price. Sentinel turns a library's blind spot into a
+> cyber-insurer could price. Cascade turns a library's blind spot into a
 > feedback loop. Thanks."
 
 ---

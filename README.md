@@ -1,10 +1,10 @@
 <div align="center">
 
-# 🛡️ Sentinel
+# 🛡️ Cascade
 
 ### Fleet telemetry hardens a shared library for every app at once.
 
-When a library has a vulnerability, its maintainer is blind — they can't see how it's used in the wild, or that it's under attack, until it's a headline. **Sentinel closes that loop.**
+When a library has a vulnerability, its maintainer is blind — they can't see how it's used in the wild, or that it's under attack, until it's a headline. **Cascade closes that loop.**
 
 <br/>
 
@@ -16,7 +16,7 @@ When a library has a vulnerability, its maintainer is blind — they can't see h
 
 <br/>
 
-<img src="docs/sentinel.gif" alt="Sentinel — one fix protects every app at once" width="900"/>
+<img src="docs/cascade.gif" alt="Cascade — one fix protects every app at once" width="900"/>
 
 </div>
 
@@ -104,7 +104,7 @@ Every harden runs a real pipeline, shown live in the console:
 ## Run it
 
 ```bash
-GITHUB_TOKEN=$(gh auth token) GH_REPO=KabirKoratkar/sentinel \
+GITHUB_TOKEN=$(gh auth token) GH_REPO=KabirKoratkar/cascade \
   PORT=8080 node web/server.js      # open http://localhost:8080
 ```
 
@@ -114,7 +114,7 @@ Click **Run attack** → board red → **Harden the library** → agent pipeline
 
 ## Sponsors
 
-| | Role in Sentinel |
+| | Role in Cascade |
 |---|---|
 | **ClickHouse** | The live, high-volume attack signal every scout reports into |
 | **Akash** | Generates the fix on an open model via AkashML; deploys on Akash Network ([`deploy.yaml`](deploy.yaml)) |
@@ -125,6 +125,6 @@ Click **Run attack** → board red → **Harden the library** → agent pipeline
 
 ## Where it goes
 
-Today it's 3 apps in a demo. In the real world it's the thousands of apps that depend on one library — and that live risk signal is something a cyber-insurer could price. Sentinel turns a library's blind spot into a feedback loop.
+Today it's 3 apps in a demo. In the real world it's the thousands of apps that depend on one library — and that live risk signal is something a cyber-insurer could price. Cascade turns a library's blind spot into a feedback loop.
 
 <div align="center"><sub>ClickHouse for the signal · an agent for the fix · a real pull request for the record.</sub></div>

@@ -1,6 +1,6 @@
 # Deploy the testable site on Akash
 
-Sentinel uses Akash **twice** — AkashML for inference (the fix generator) and
+Cascade uses Akash **twice** — AkashML for inference (the fix generator) and
 Akash Network for hosting this container. That's a strong "best use of Akash".
 
 The site is one process (`web/server.js`), pure Node built-ins, **no build and
@@ -36,7 +36,7 @@ no image push**: a stock `node:22` image clones the public repo at startup.
 
 ## Local / other hosts
 ```bash
-GITHUB_TOKEN=$(gh auth token) GH_REPO=KabirKoratkar/sentinel \
+GITHUB_TOKEN=$(gh auth token) GH_REPO=KabirKoratkar/cascade \
   PORT=8080 node web/server.js         # then open http://localhost:8080
 ```
-Any container host works too: `docker build -t sentinel . && docker run -p 8080:8080 --env-file .env sentinel`.
+Any container host works too: `docker build -t cascade . && docker run -p 8080:8080 --env-file .env cascade`.

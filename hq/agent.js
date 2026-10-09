@@ -22,7 +22,7 @@ const POLL_MS = 1500;
 const log = (...a) => console.log("[agent]", ...a);
 
 // ---- the hardened guard the agent ships (deterministic, verified) ----------
-const HARDENED_GUARD = `// guard.js — hardened by the Sentinel HQ agent from live attack telemetry.
+const HARDENED_GUARD = `// guard.js — hardened by the Cascade HQ agent from live attack telemetry.
 // Blocks SSRF: rejects loopback, link-local/metadata, and private-range hosts,
 // by literal IP and by resolved DNS.
 const dns = require("dns").promises;
@@ -150,10 +150,10 @@ function semgrepScan(file) {
 
 function openPR(evidence, source, scan) {
   const repo = process.env.GH_REPO;
-  const branch = `sentinel/harden-ssrf-${Date.now()}`;
+  const branch = `cascade/harden-ssrf-${Date.now()}`;
   const title = "Harden linkpreview against SSRF (from live attack telemetry)";
   const bodyLines = [
-    "Autonomous patch opened by the **Sentinel HQ agent**.",
+    "Autonomous patch opened by the **Cascade HQ agent**.",
     "",
     `**Evidence (grounded in HQ telemetry):** ${evidence.leakCount} successful internal fetches across \`${evidence.apps.join("`, `")}\`.`,
     "Sample attack URLs seen in the wild:",

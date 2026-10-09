@@ -1,4 +1,4 @@
-# Sentinel — demo runbook
+# Cascade — demo runbook
 
 ## 4 terminals
 ```bash

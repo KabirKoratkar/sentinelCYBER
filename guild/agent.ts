@@ -1,4 +1,4 @@
-// Sentinel HQ — the SSRF-hardening analyst, hosted and run on Guild.
+// Cascade HQ — the SSRF-hardening analyst, hosted and run on Guild.
 // Input: JSON attack evidence aggregated from the fleet's scouts, e.g.
 //   {"leakCount":48,"apps":["chatly","feedbot","snapshot"],
 //    "samples":["http://127.0.0.1:8169/","http://169.254.169.254/..."]}
