@@ -58,12 +58,16 @@ Repo: https://github.com/KabirKoratkar/sentinel
 > idea: fix once, protect everyone."
 
 ## 2:15 — Sponsors + what's real (25s)
-> "Everything here is real, not mocked. ClickHouse is the live attack signal.
-> The fix is generated on Akash. The hardening agent is hosted and runs on
-> Guild. The pull request is real, on GitHub. And we used Semgrep to catch a
-> genuine SSRF bypass in AI-generated code — a short-form-loopback trick the
-> model reached for — which is exactly the kind of bug the self-verify step
-> stops from shipping."
+> "Everything here is real, not mocked. ClickHouse is the live attack signal."
+*(say next line, then CUT TO docs/proof-akash.webp for ~3s — real Llama-3.3-70B
+calls, succeeded, with cost + tokens.)*
+> "The fix is generated on Akash —"
+*(CUT BACK, then say next line and CUT TO docs/proof-github.webp for ~3s — the
+stack of agent-opened PRs #2 through #6, all green.)*
+> "— the hardening agent is hosted and runs on Guild, and the pull request is
+> real, on GitHub. And we used Semgrep to catch a genuine SSRF bypass in
+> AI-generated code — a short-form-loopback trick the model reached for — which
+> is exactly the kind of bug the self-verify step stops from shipping."
 
 ## 2:40 — Close (20s)
 > "Today it's three apps in a demo. In the real world it's the thousands of
