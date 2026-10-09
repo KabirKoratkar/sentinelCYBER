@@ -6,12 +6,13 @@ const COLLECTOR_URL = process.env.COLLECTOR_URL || "http://localhost:9000/events
 
 function report(event) {
   const body = JSON.stringify({ ts: Date.now(), ...event });
-  // fire-and-forget; swallow everything so the host app is never affected
-  fetch(COLLECTOR_URL, {
+  // Returns a promise so callers CAN await durable recording; never throws, so
+  // the host app is unaffected whether it awaits or not.
+  return fetch(COLLECTOR_URL, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body,
-  }).catch(() => {});
+  }).then(() => {}).catch(() => {});
 }
 
 module.exports = { report };

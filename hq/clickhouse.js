@@ -50,6 +50,12 @@ async function insert(e) {
   await exec("INSERT INTO events FORMAT JSONEachRow", row);
 }
 
+// Clear all events (reset the board to a clean slate).
+async function clear() {
+  if (!enabled) { mem.length = 0; return; }
+  await exec("TRUNCATE TABLE IF EXISTS events");
+}
+
 // Minimal queries the dashboard/agent need. In-memory mirrors them.
 async function stats() {
   if (!enabled) {
@@ -101,4 +107,4 @@ async function attackEvidence() {
   };
 }
 
-module.exports = { init, insert, stats, attackEvidence, enabled };
+module.exports = { init, insert, stats, attackEvidence, clear, enabled };
