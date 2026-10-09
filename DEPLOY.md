@@ -36,7 +36,7 @@ no image push**: a stock `node:22` image clones the public repo at startup.
 
 ## Local / other hosts
 ```bash
-GITHUB_TOKEN=$(gh auth token) GH_REPO=KabirKoratkar/sentinel-linkpreview \
+GITHUB_TOKEN=$(gh auth token) GH_REPO=KabirKoratkar/sentinel \
   PORT=8080 node web/server.js         # then open http://localhost:8080
 ```
 Any container host works too: `docker build -t sentinel . && docker run -p 8080:8080 --env-file .env sentinel`.

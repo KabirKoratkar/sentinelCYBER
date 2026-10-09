@@ -12,7 +12,7 @@ services:
       - "sh"
       - "-c"
     args:
-      - "git clone --depth 1 https://github.com/KabirKoratkar/sentinel-linkpreview /app && cd /app && node web/server.js"
+      - "git clone --depth 1 https://github.com/KabirKoratkar/sentinel /app && cd /app && node web/server.js"
     env:
       - "PORT=8080"
       - "CLICKHOUSE_URL=https://r6kozs75hk.us-west-2.aws.clickhouse.cloud:8443"
@@ -22,7 +22,7 @@ services:
       - "AKASH_BASE_URL=https://api.akashml.com/v1"
       - "AKASH_API_KEY=<AKASH_API_KEY>"
       - "AKASH_MODEL=meta-llama/Llama-3.3-70B-Instruct"
-      - "GH_REPO=KabirKoratkar/sentinel-linkpreview"
+      - "GH_REPO=KabirKoratkar/sentinel"
       - "GITHUB_TOKEN=<GITHUB_TOKEN>"
     expose:
       - port: 8080
