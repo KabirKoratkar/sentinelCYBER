@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sentinel HQ</title>
+<style>
+  :root { --bg:#0b0f17; --card:#131a26; --line:#223049; --txt:#e6edf6; --mut:#8aa0bd; --red:#ff5d6c; --grn:#35d08a; --amb:#ffbf47; --acc:#5aa2ff; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--txt); font:15px/1.5 ui-sans-serif,system-ui,-apple-system,sans-serif; }
+  header { padding:18px 24px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:14px; }
+  header h1 { font-size:18px; margin:0; letter-spacing:.5px; }
+  .badge { font-size:12px; color:var(--mut); border:1px solid var(--line); padding:3px 9px; border-radius:999px; }
+  .wrap { padding:24px; max-width:1100px; margin:0 auto; }
+  .verdict { font-size:22px; font-weight:700; padding:14px 18px; border-radius:12px; margin-bottom:22px; border:1px solid var(--line); }
+  .v-leak { background:rgba(255,93,108,.12); color:var(--red); }
+  .v-safe { background:rgba(53,208,138,.12); color:var(--grn); }
+  .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:24px; }
+  @media (max-width:760px){ .grid{ grid-template-columns:1fr; } }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; }
+  .card.hot { border-color:var(--red); box-shadow:0 0 0 1px var(--red) inset; }
+  .card.ok { border-color:var(--grn); }
+  .app { font-weight:700; font-size:16px; }
+  .role { color:var(--mut); font-size:12px; margin-bottom:12px; }
+  .nums { display:flex; gap:16px; }
+  .n { font-size:13px; color:var(--mut); }
+  .n b { display:block; font-size:22px; color:var(--txt); }
+  .n.leak b { color:var(--red); } .n.block b { color:var(--grn); }
+  h2 { font-size:13px; text-transform:uppercase; letter-spacing:1px; color:var(--mut); margin:0 0 10px; }
+  .feed { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:8px 0; max-height:320px; overflow:auto; }
+  .row { display:grid; grid-template-columns:70px 90px 1fr 90px; gap:10px; padding:6px 16px; font-size:13px; border-bottom:1px solid rgba(255,255,255,.03); }
+  .row .app { font-weight:600; font-size:13px; }
+  .tag { justify-self:end; font-size:11px; padding:1px 8px; border-radius:999px; }
+  .t-LEAKED { background:rgba(255,93,108,.18); color:var(--red); }
+  .t-blocked { background:rgba(53,208,138,.18); color:var(--grn); }
+  .t-ok { background:rgba(90,162,255,.15); color:var(--acc); }
+  .t-error,.t-down { background:rgba(138,160,189,.15); color:var(--mut); }
+  .mut { color:var(--mut); } .mono { font-family:ui-monospace,monospace; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>🛡️ SENTINEL · HQ</h1>
+    <span class="badge" id="backend">store: …</span>
+    <span class="badge">library: linkpreview</span>
+  </header>
+  <div class="wrap">
+    <div class="verdict" id="verdict">waiting for telemetry…</div>
+    <div class="grid" id="grid"></div>
+    <h2>Live scout feed</h2>
+    <div class="feed" id="feed"></div>
+  </div>
+<script>
+const ROLES = { chatly:"chat link unfurler", feedbot:"rss/webhook fetcher", snapshot:"admin image proxy" };
+async function j(u){ try { return await (await fetch(u)).json(); } catch { return null; } }
+function host(u){ try { return new URL(u).host; } catch { return u; } }
+
+async function tick(){
+  const s = await j("/api/stats");
+  const recent = await j("/api/recent") || [];
+  if (!s) return;
+  document.getElementById("backend").textContent = "store: " + s.backend;
+
+  const apps = (s.apps||[]).sort((a,b)=> (a.app>b.app?1:-1));
+  let totalLeak=0, totalBlock=0;
+  document.getElementById("grid").innerHTML = (apps.length?apps:[{app:"(none yet)"}]).map(a=>{
+    const leaked=+a.leaked||0, blocked=+a.blocked||0, attacks=+a.attacks||0, total=+a.total||0;
+    totalLeak+=leaked; totalBlock+=blocked;
+    const cls = leaked>0 ? "hot" : (blocked>0 ? "ok" : "");
+    return `<div class="card ${cls}">
+      <div class="app">${a.app}</div>
+      <div class="role">${ROLES[a.app]||""}</div>
+      <div class="nums">
+        <div class="n"><b>${total}</b>calls</div>
+        <div class="n"><b>${attacks}</b>attacks</div>
+        <div class="n leak"><b>${leaked}</b>leaked</div>
+        <div class="n block"><b>${blocked}</b>blocked</div>
+      </div></div>`;
+  }).join("");
+
+  const v = document.getElementById("verdict");
+  if (totalLeak>0){ v.className="verdict v-leak"; v.textContent=`⚠ SSRF LEAKING — ${totalLeak} internal secrets exfiltrated across ${apps.filter(a=>+a.leaked>0).length} apps`; }
+  else if (totalBlock>0){ v.className="verdict v-safe"; v.textContent=`✓ HARDENED — ${totalBlock} attacks blocked at the library. No app changed a line.`; }
+  else { v.className="verdict"; v.textContent="waiting for telemetry…"; }
+
+  document.getElementById("feed").innerHTML = recent.map(e=>{
+    const tag = e.outcome==="ok" && e.internal ? "LEAKED" : e.outcome;
+    return `<div class="row">
+      <span class="mut mono">${new Date(e.ts).toLocaleTimeString()}</span>
+      <span class="app">${e.app}</span>
+      <span class="mono">${host(e.url)} ${e.internal?'<span class="mut">· internal</span>':''}</span>
+      <span class="tag t-${tag}">${tag}</span></div>`;
+  }).join("");
+}
+setInterval(tick, 1000); tick();
+</script>
+</body>
+</html>
