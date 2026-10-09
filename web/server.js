@@ -1,4 +1,4 @@
-// Cascade — single-process, browser-testable demo server.
+// sentinelCYBER — single-process, browser-testable demo server.
 // One Node process hosts: the dashboard, 3 apps (route namespaces) that use the
 // linkpreview library, the internal "secret" target, the HQ collector, and the
 // Attack / Harden / Reset controls the buttons call. Deployable as one container.
@@ -102,13 +102,13 @@ async function openPR(evidence, source) {
     ...opt, headers: { authorization: `Bearer ${token}`, accept: "application/vnd.github+json", "content-type": "application/json", "user-agent": "sentinel-hq" },
   });
   try {
-    const branch = `cascade/harden-ssrf-${Date.now()}`;
+    const branch = `sentinelcyber/harden-ssrf-${Date.now()}`;
     const mainRef = await (await api("/git/ref/heads/main")).json();
     const baseSha = mainRef.object.sha;
     await api("/git/refs", { method: "POST", body: JSON.stringify({ ref: `refs/heads/${branch}`, sha: baseSha }) });
     const cur = await (await api(`/contents/library/src/guard.js?ref=${branch}`)).json();
     const bodyText = [
-      "Autonomous patch opened by the **Cascade HQ agent** (live web demo).", "",
+      "Autonomous patch opened by the **sentinelCYBER HQ agent** (live web demo).", "",
       `**Evidence:** ${evidence.leaked} successful internal fetches across \`chatly\`, \`feedbot\`, \`snapshot\`.`,
       `**Fix:** range-based SSRF guard (loopback incl 127.1, 169.254/16, RFC1918, IPv6).`,
       `**Patch source:** ${source}. **Self-verified** before shipping.`, "",
@@ -177,4 +177,4 @@ const server = http.createServer(async (req, res) => {
   res.end(fs.readFileSync(path.join(__dirname, "index.html")));
 });
 
-(async () => { await ch.init(); fs.writeFileSync(GUARD, GUARD_VULN); server.listen(PORT, () => console.log(`Cascade web on http://localhost:${PORT} (store: ${ch.enabled ? "ClickHouse" : "memory"})`)); })();
+(async () => { await ch.init(); fs.writeFileSync(GUARD, GUARD_VULN); server.listen(PORT, () => console.log(`sentinelCYBER web on http://localhost:${PORT} (store: ${ch.enabled ? "ClickHouse" : "memory"})`)); })();

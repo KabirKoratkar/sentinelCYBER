@@ -1,6 +1,6 @@
 # Guild integration — the HQ hardening brain runs on Guild
 
-The decision-making agent at Cascade HQ is **hosted and run on Guild.ai**, not
+The decision-making agent at sentinelCYBER HQ is **hosted and run on Guild.ai**, not
 on our own box. It is an `@guildai/agents-sdk` LLM agent whose job is: take the
 aggregated SSRF attack evidence from the fleet's scouts and return a hardened
 `guard.js` the library ships to every dependent.
