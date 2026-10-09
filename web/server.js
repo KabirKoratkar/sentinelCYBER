@@ -23,6 +23,9 @@ const { isInternalHost } = require("../hq/netcheck");
 const APPS = { chatly: "chat link unfurler", feedbot: "rss/webhook fetcher", snapshot: "admin image proxy" };
 const recent = [];
 let prCooldownUntil = 0;
+// Live agent step log so the UI can show the run as it happens.
+let agentLog = [];
+const logStep = (step, status, detail = "") => agentLog.push({ t: Date.now(), step, status, detail });
 
 const SECRET = {
   warning: "INTERNAL ONLY — reachable means SSRF succeeded",
@@ -35,21 +38,24 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // ---- attack: hit our own 3 apps with SSRF + benign noise -------------------
 async function runAttack(rounds = 4) {
+  // Fast, local targets only — all resolve instantly so the web demo is snappy.
+  // 127.0.0.1 and localhost hit our own internal-meta route (the SSRF target);
+  // 127.1 is the short-form-loopback bypass; example.com is benign noise.
   const ssrf = [
     `http://127.0.0.1:${PORT}/internal-meta/iam/security-credentials/`,
     `http://localhost:${PORT}/internal-meta/admin`,
-    "http://169.254.169.254/latest/meta-data/",
-    "http://127.1/internal-meta/",
+    `http://127.1:${PORT}/internal-meta/`,
   ];
-  const benign = ["http://example.com/", "http://example.org/"];
+  const benign = "http://example.com/"; // genuine public URL — allowed, resolves fast
   let leaked = 0, blocked = 0;
-  for (let i = 0; i < rounds; i++)
-    for (const app of Object.keys(APPS)) {
-      for (const u of ssrf) {
-        try { const r = await fetch(`http://127.0.0.1:${PORT}/app/${app}/preview?url=${encodeURIComponent(u)}`); const b = await r.json(); if (b.ok) leaked++; else if (b.blocked) blocked++; } catch {}
-      }
-      try { await fetch(`http://127.0.0.1:${PORT}/app/${app}/preview?url=${encodeURIComponent(benign[i % benign.length])}`); } catch {}
-    }
+  const hit = async (app, u) => {
+    try { const b = await (await fetch(`http://127.0.0.1:${PORT}/app/${app}/preview?url=${encodeURIComponent(u)}`)).json(); if (b.ok) leaked++; else if (b.blocked) blocked++; } catch {}
+  };
+  for (let i = 0; i < rounds; i++) {
+    const batch = [];
+    for (const app of Object.keys(APPS)) { for (const u of ssrf) batch.push(hit(app, u)); batch.push(fetch(`http://127.0.0.1:${PORT}/app/${app}/preview?url=${encodeURIComponent(benign)}`).catch(() => {})); }
+    await Promise.all(batch); // all apps/targets for this round in parallel
+  }
   return { rounds, leaked, blocked };
 }
 
@@ -141,17 +147,29 @@ const server = http.createServer(async (req, res) => {
   if (p === "/api/recent") return j(res, recent.slice(-40).reverse());
   // controls
   if (req.method === "POST" && p === "/api/attack") return j(res, await runAttack(Number(u.searchParams.get("rounds")) || 4));
-  if (req.method === "POST" && p === "/api/reset") { fs.writeFileSync(GUARD, GUARD_VULN); await ch.clear(); recent.length = 0; return j(res, { reset: true }); }
+  if (p === "/api/agent") return j(res, agentLog);
+  if (req.method === "POST" && p === "/api/reset") { fs.writeFileSync(GUARD, GUARD_VULN); await ch.clear(); recent.length = 0; agentLog = []; return j(res, { reset: true }); }
   if (req.method === "POST" && p === "/api/harden") {
+    agentLog = [];
     const ev = await ch.attackEvidence();                 // evidence from the attack just seen
+    logStep("detect", "done", `${ev.leakCount} internal fetches across ${ev.apps.length} apps`);
+    logStep("generate", "running");
     const { code, source } = await generatePatch(u.searchParams.get("ai") === "1");
+    agentLog.pop(); logStep("generate", "done", source);
+    logStep("verify", "running");
     const verified = await selfVerify(code);
+    agentLog.pop(); logStep("verify", verified ? "done" : "failed", verified ? "blocks loopback, 127.1, metadata, RFC1918; allows public" : "candidate rejected, using verified template");
     const useCode = verified ? code : GUARD_HARDENED;
+    logStep("pr", "running");
     const pr = await openPR({ leaked: ev.leakCount }, source);
+    agentLog.pop(); logStep("pr", pr.opened ? "done" : "skipped", pr.opened ? pr.url : pr.reason);
     fs.writeFileSync(GUARD, useCode);                      // hot-deploy
+    logStep("deploy", "done", "guard.js hot-reloaded in all 3 apps");
     await sleep(300);
     await ch.clear(); recent.length = 0;                   // clean slate to prove the fix
+    logStep("retest", "running");
     const check = await runAttack(1);                      // re-verify live -> all blocked
+    agentLog.pop(); logStep("retest", check.leaked === 0 ? "done" : "failed", `${check.blocked} blocked, ${check.leaked} leaked`);
     return j(res, { source, verified, deployed: true, evidenceLeaks: ev.leakCount, pr, afterAttack: check });
   }
   // dashboard
