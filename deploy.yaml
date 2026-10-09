@@ -1,0 +1,54 @@
+# Akash SDL — runs the Sentinel web demo with NO image build.
+# A stock node:22 image clones the public repo at startup and runs the server.
+# Fill the three <SECRET> values before deploying (or set them in the Akash
+# console's env editor so they never touch git).
+---
+version: "2.0"
+
+services:
+  web:
+    image: node:22
+    command:
+      - "sh"
+      - "-c"
+    args:
+      - "git clone --depth 1 https://github.com/KabirKoratkar/sentinel-linkpreview /app && cd /app && node web/server.js"
+    env:
+      - "PORT=8080"
+      - "CLICKHOUSE_URL=https://r6kozs75hk.us-west-2.aws.clickhouse.cloud:8443"
+      - "CLICKHOUSE_USER=default"
+      - "CLICKHOUSE_PASSWORD=<CLICKHOUSE_PASSWORD>"
+      - "CLICKHOUSE_DB=default"
+      - "AKASH_BASE_URL=https://api.akashml.com/v1"
+      - "AKASH_API_KEY=<AKASH_API_KEY>"
+      - "AKASH_MODEL=meta-llama/Llama-3.3-70B-Instruct"
+      - "GH_REPO=KabirKoratkar/sentinel-linkpreview"
+      - "GITHUB_TOKEN=<GITHUB_TOKEN>"
+    expose:
+      - port: 8080
+        as: 80
+        to:
+          - global: true
+
+profiles:
+  compute:
+    web:
+      resources:
+        cpu:
+          units: 0.5
+        memory:
+          size: 512Mi
+        storage:
+          size: 1Gi
+  placement:
+    dcloud:
+      pricing:
+        web:
+          denom: uakt
+          amount: 10000
+
+deployment:
+  web:
+    dcloud:
+      profile: web
+      count: 1
