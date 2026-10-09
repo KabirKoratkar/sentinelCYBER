@@ -16,7 +16,7 @@ When a library has a vulnerability, its maintainer is blind — they can't see h
 
 <br/>
 
-<img src="docs/console-hardened.png" alt="Sentinel console" width="860"/>
+<img src="docs/thumbnail.png" alt="Sentinel — one fix protects every app at once" width="900"/>
 
 </div>
 
