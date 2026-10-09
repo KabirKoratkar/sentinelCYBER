@@ -126,13 +126,22 @@ function selfVerify(code) {
   }
 }
 
+function semgrepBin() {
+  const globby = require("fs");
+  const guess = require("os").homedir() + "/Library/Python/3.9/bin/semgrep";
+  return globby.existsSync(guess) ? guess : "semgrep";
+}
+
 function semgrepScan(file) {
+  const rule = path.join(ROOT, ".semgrep", "ssrf-denylist-bypass.yaml");
+  const env = { ...process.env, PATH: `${require("os").homedir()}/Library/Python/3.9/bin:${process.env.PATH}` };
   try {
-    const out = execFileSync("semgrep", ["--config", "auto", "--error", "--json", file], {
-      encoding: "utf8", stdio: ["ignore", "pipe", "ignore"],
-    });
-    const n = (JSON.parse(out).results || []).length;
-    return { ran: true, findings: n };
+    const out = execFileSync(
+      semgrepBin(),
+      ["scan", "--config", rule, "--config", "p/javascript", "--no-git-ignore", "--json", file],
+      { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"], env }
+    );
+    return { ran: true, findings: (JSON.parse(out).results || []).length };
   } catch (e) {
     if (e.stdout) { try { return { ran: true, findings: (JSON.parse(e.stdout).results || []).length }; } catch {} }
     return { ran: false, findings: 0 };

@@ -1,0 +1,28 @@
+rules:
+  - id: ssrf-incomplete-ip-denylist
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: >
+      SSRF guard uses an exact-string denylist against individual loopback /
+      link-local IPs (e.g. "127.0.0.1", "169.254.169.254"). This is bypassable:
+      127.0.0.2, 0.0.0.0, 2130706433 (decimal), 0x7f000001 (hex), [::ffff:127.0.0.1]
+      (IPv4-mapped IPv6), and every other 127.0.0.0/8 or 169.254.0.0/16 address
+      reach the internal target. Match the whole range (e.g. /^127\./, /^169\.254\./)
+      after normalizing the host, or use an allowlist. Seen in AI-generated code.
+    metadata:
+      category: security
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp: "A10:2021 - Server-Side Request Forgery"
+      confidence: HIGH
+      references:
+        - https://owasp.org/Top10/A10_2021-Server-Side_Request_Forgery_%28SSRF%29/
+    patterns:
+      - pattern-either:
+          - pattern: $H === "169.254.169.254"
+          - pattern: $H == "169.254.169.254"
+          - pattern: $H === "127.0.0.1"
+          - pattern: $H == "127.0.0.1"
+      # Only flag when it sits inside a function that throws/returns on the match
+      # (i.e. it is being USED as the guard), not an unrelated comparison.
+      - pattern-inside: |
+          function $F(...) { ... }
