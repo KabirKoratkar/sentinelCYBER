@@ -69,7 +69,7 @@ h2{font-size:clamp(30px,4.2vw,56px);line-height:1.06;letter-spacing:-.025em;font
 <section class="slide"><div class="grid"></div>
   <div class="brand"><span class="mark"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z" fill="#0a0b0e" fill-opacity=".25" stroke="#0a0b0e" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.5 12.2l2.3 2.3 4.6-4.8" stroke="#0a0b0e" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><div class="wm">sentinelCYBER</div><div class="tag">autonomous security agent</div></div></div>
   <h1>One fix protects <span class="g">every app</span> at once.</h1>
-  <div class="lead">When a shared library has a security hole, every app that depends on it is exposed. sentinelCYBER catches the live attacks, writes a verified patch, and opens a real pull request — hardening the library for the whole fleet.</div>
+  <div class="lead">When a shared library has a security hole, every app that depends on it is exposed. The moment one of those apps is attacked, sentinelCYBER writes a verified patch into the library itself and opens a real pull request — protecting every other dependent, even the ones never touched.</div>
   <div class="foot">Cyberdefense Hackathon · ClickHouse · Akash · Guild · Semgrep</div>
 </section>
 
@@ -81,12 +81,12 @@ h2{font-size:clamp(30px,4.2vw,56px);line-height:1.06;letter-spacing:-.025em;font
 
 <section class="slide"><div class="grid"></div>
   <div class="ey"><span class="n">02</span> Solution</div>
-  <h2 style="margin-bottom:6px;">Give the library a feedback loop.</h2>
-  <div class="lead" style="margin-bottom:34px;">A scout in every app reports attacks back to HQ. An autonomous agent hardens the <b style="color:var(--text)">library itself</b> — one fix protects every app that depends on it.</div>
+  <h2 style="margin-bottom:6px;">One app surfaces it. Everyone gets the fix.</h2>
+  <div class="lead" style="margin-bottom:34px;">The moment a single app's traffic shows a potential issue, an autonomous agent patches the <b style="color:var(--text)">library itself</b> — protecting every other app that depends on it, even the ones never attacked.</div>
   <div class="cards" style="grid-template-columns:repeat(3,1fr);max-width:1050px;">
     <div class="card"><div class="k">① SEE</div><div class="v">Scouts stream every call and attack into ClickHouse — the maintainer finally sees the fleet.</div></div>
     <div class="card"><div class="k">② FIX</div><div class="v">An agent writes a hardened patch for the shared library and <b>self-verifies</b> it before shipping.</div></div>
-    <div class="card"><div class="k">③ SHIP</div><div class="v">It opens a <b>real pull request</b> and hot-deploys — every dependent is protected at once.</div></div>
+    <div class="card"><div class="k">③ SHIP</div><div class="v">It opens a <b>real pull request</b> and hot-deploys — <b>every</b> dependent is protected, even ones never attacked.</div></div>
   </div>
 </section>
 
