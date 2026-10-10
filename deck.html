@@ -74,26 +74,37 @@ h2{font-size:clamp(30px,4.2vw,56px);line-height:1.06;letter-spacing:-.025em;font
 </section>
 
 <section class="slide"><div class="grid"></div>
-  <div class="ey"><span class="n">01</span> The problem</div>
+  <div class="ey"><span class="n">01</span> Problem</div>
   <h2>A library maintainer is <span style="color:var(--red)">blind</span>.</h2>
-  <div class="lead">They can't see how their code is used in the wild, or that it's under attack, until it's already a headline. One hole in a shared dependency exposes thousands of apps at once — Log4Shell, the XZ backdoor, the npm worms. By the time anyone notices, the damage is done.</div>
+  <div class="lead">They can't see how their code is used in the wild, or that it's under attack, until it's a headline. One hole in a shared dependency exposes <b style="color:var(--text)">thousands of apps at once</b> — Log4Shell, the XZ backdoor, the npm worms. By the time anyone patches, attackers already have the window.</div>
 </section>
 
 <section class="slide"><div class="grid"></div>
-  <div class="ey"><span class="n">02</span> The idea</div>
-  <h2>Give the library a feedback loop.</h2>
-  <div class="lead">A <b style="color:var(--text)">scout</b> inside every app reports real usage and attacks back to HQ. When the fleet gets hit, an autonomous agent hardens the <b style="color:var(--text)">library itself</b> — so a single change protects every dependent.</div>
+  <div class="ey"><span class="n">02</span> Solution</div>
+  <h2 style="margin-bottom:6px;">Give the library a feedback loop.</h2>
+  <div class="lead" style="margin-bottom:34px;">A scout in every app reports attacks back to HQ. An autonomous agent hardens the <b style="color:var(--text)">library itself</b> — one fix protects every app that depends on it.</div>
+  <div class="cards" style="grid-template-columns:repeat(3,1fr);max-width:1050px;">
+    <div class="card"><div class="k">① SEE</div><div class="v">Scouts stream every call and attack into ClickHouse — the maintainer finally sees the fleet.</div></div>
+    <div class="card"><div class="k">② FIX</div><div class="v">An agent writes a hardened patch for the shared library and <b>self-verifies</b> it before shipping.</div></div>
+    <div class="card"><div class="k">③ SHIP</div><div class="v">It opens a <b>real pull request</b> and hot-deploys — every dependent is protected at once.</div></div>
+  </div>
+</section>
+
+<section class="slide"><div class="grid"></div>
+  <div class="ey"><span class="n">03</span> How it works</div>
+  <h2>Attack signal in, verified fix out.</h2>
   <div class="flow"><b>attack</b><span class="ar">→</span><b>scouts report</b><span class="ar">→</span><b>ClickHouse</b><span class="ar">→</span><b>agent writes fix</b><span class="ar">→</span><b>self-verify</b><span class="ar">→</span><b>PR + deploy</b></div>
+  <div class="lead">The maintainer never had the signal or the time. sentinelCYBER gives them both — the attack data lives in ClickHouse, and the agent closes the loop automatically.</div>
 </section>
 
 <section class="slide" style="align-items:center;text-align:center;"><div class="grid"></div>
-  <div class="ey" style="justify-content:center;"><span class="n">03</span> Live</div>
+  <div class="ey" style="justify-content:center;"><span class="n">04</span> Demo</div>
   <img class="shot" src="docs/sentinelcyber.gif" alt="attack to protected"/>
   <div class="sub" style="text-align:center;">Attack the fleet — credentials leak (red). Harden once — every app is protected (green).</div>
 </section>
 
 <section class="slide"><div class="grid"></div>
-  <div class="ey"><span class="n">04</span> Before / after</div>
+  <div class="ey"><span class="n">05</span> The money moment</div>
   <div class="two">
     <div><img src="docs/console-attack.png" alt="leaking"/><div class="cap r">SSRF leaking across 3 apps</div></div>
     <div><img src="docs/console-hardened.png" alt="hardened"/><div class="cap g">all blocked at the library</div></div>
@@ -102,7 +113,7 @@ h2{font-size:clamp(30px,4.2vw,56px);line-height:1.06;letter-spacing:-.025em;font
 </section>
 
 <section class="slide"><div class="grid"></div>
-  <div class="ey"><span class="n">05</span> The agent</div>
+  <div class="ey"><span class="n">06</span> Under the hood</div>
   <h2 style="margin-bottom:6px;">It never ships a fix it hasn't tested.</h2>
   <div class="steps">
     <div class="step"><span class="i">1</span><div><div class="nm">Read the attack signal</div><div class="d">Aggregated SSRF evidence from ClickHouse</div></div></div>
@@ -114,7 +125,7 @@ h2{font-size:clamp(30px,4.2vw,56px);line-height:1.06;letter-spacing:-.025em;font
 </section>
 
 <section class="slide"><div class="grid"></div>
-  <div class="ey"><span class="n">06</span> Proof it's real</div>
+  <div class="ey"><span class="n">07</span> Traction</div>
   <div class="cards">
     <div class="card"><div class="k">CLICKHOUSE</div><div class="v">The live, high-volume <b>attack signal</b> every scout reports into.</div></div>
     <div class="card"><div class="k">AKASH</div><div class="v">Generates the fix on an <b>open model</b>; also hosts the demo (SDL).</div></div>
@@ -125,7 +136,7 @@ h2{font-size:clamp(30px,4.2vw,56px);line-height:1.06;letter-spacing:-.025em;font
 </section>
 
 <section class="slide"><div class="grid"></div>
-  <div class="ey"><span class="n">07</span> Where it goes</div>
+  <div class="ey"><span class="n">08</span> Vision</div>
   <h2>Fix once. Protect everyone.</h2>
   <div class="lead">Today it's 3 apps in a demo. In the real world it's the thousands of apps that depend on one library — and that live risk signal is something a cyber-insurer could price. sentinelCYBER turns a library's blind spot into a feedback loop.</div>
   <div class="sponsors"><span><b>ClickHouse</b></span><span><b>Akash</b></span><span><b>Guild</b></span><span><b>Semgrep</b></span></div>
