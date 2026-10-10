@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>sentinelCYBER — pitch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0a0b0e;--panel:#101217;--line:#1d2029;--line2:#2a2e38;--text:#e8e9ed;--t2:#9aa0ac;--t3:#636976;--acc:#5b8def;--red:#ef5350;--grn:#35c98a;--amb:#e0a94a;--sans:"Geist",system-ui,sans-serif;--mono:"Geist Mono",ui-monospace,monospace;}
+*{margin:0;box-sizing:border-box;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden;}
+.mono{font-family:var(--mono);}
+#deck{height:100vh;width:100vw;position:relative;}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:7vh 9vw;
+  background:radial-gradient(1100px 600px at 10% -10%,rgba(91,141,239,.14),transparent 60%),radial-gradient(900px 600px at 110% 120%,rgba(53,201,138,.1),transparent 55%),var(--bg);}
+.slide.on{display:flex;animation:fade .4s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:46px 46px;mask-image:radial-gradient(1200px 700px at 30% 20%,#000,transparent 85%);pointer-events:none;}
+.ey{font:600 14px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--t3);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.ey .n{color:var(--acc);}
+h1{font-size:clamp(40px,6.2vw,86px);line-height:1.02;letter-spacing:-.03em;font-weight:600;}
+h1 .g{color:var(--grn);}
+h2{font-size:clamp(30px,4.2vw,56px);line-height:1.06;letter-spacing:-.025em;font-weight:600;max-width:20ch;}
+.lead{font-size:clamp(17px,1.8vw,23px);line-height:1.5;color:var(--t2);max-width:60ch;margin-top:22px;}
+.brand{display:flex;align-items:center;gap:16px;margin-bottom:26px;}
+.mark{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,var(--acc),#8ab0f7);box-shadow:0 0 0 1px rgba(91,141,239,.35),0 10px 34px rgba(91,141,239,.42);display:flex;align-items:center;justify-content:center;}
+.wm{font-weight:600;font-size:30px;letter-spacing:.12em;}
+.tag{margin-top:8px;font:600 15px var(--mono);color:var(--t3);}
+.flow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:40px;font:600 15px var(--mono);color:var(--t2);}
+.flow b{color:var(--text);font-weight:600;background:var(--panel);border:1px solid var(--line2);padding:11px 15px;border-radius:9px;}
+.flow .ar{color:var(--line2);font-size:20px;}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:38px;max-width:1000px;}
+.card{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:20px 22px;}
+.card .k{font:600 13px var(--mono);letter-spacing:.04em;color:var(--acc);margin-bottom:9px;}
+.card .v{font-size:16px;color:var(--t2);line-height:1.45;}
+.card .v b{color:var(--text);font-weight:600;}
+.steps{display:flex;flex-direction:column;gap:12px;margin-top:34px;max-width:860px;}
+.step{display:grid;grid-template-columns:30px 1fr;gap:16px;align-items:start;}
+.step .i{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--grn);background:rgba(53,201,138,.12);color:var(--grn);font:600 13px var(--mono);display:flex;align-items:center;justify-content:center;margin-top:2px;}
+.step .nm{font-size:19px;font-weight:600;}
+.step .d{color:var(--t2);font-size:15px;margin-top:2px;}
+.big{font-size:clamp(44px,7vw,104px);line-height:1;letter-spacing:-.03em;font-weight:600;}
+.sub{color:var(--t2);font-size:clamp(17px,1.9vw,24px);margin-top:20px;max-width:55ch;line-height:1.5;}
+.shot{margin-top:4vh;border:1px solid var(--line2);border-radius:14px;max-height:52vh;max-width:88vw;box-shadow:0 30px 80px rgba(0,0,0,.5);object-fit:contain;}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:center;margin-top:3vh;}
+.two img{width:100%;border:1px solid var(--line2);border-radius:12px;}
+.cap{text-align:center;font:600 14px var(--mono);margin-top:12px;}
+.cap.r{color:var(--red);} .cap.g{color:var(--grn);}
+.sponsors{display:flex;gap:0;margin-top:40px;font:600 18px var(--mono);color:var(--t2);flex-wrap:wrap;}
+.sponsors span{padding:0 20px;border-right:1px solid var(--line2);}
+.sponsors span:first-child{padding-left:0;}.sponsors span:last-child{border-right:none;}
+.sponsors b{color:var(--text);}
+.foot{position:absolute;left:9vw;bottom:5vh;font:600 14px var(--mono);color:var(--t3);}
+.quote{font-size:clamp(26px,3.4vw,46px);line-height:1.2;font-weight:600;letter-spacing:-.02em;max-width:22ch;}
+.hud{position:fixed;right:22px;bottom:18px;display:flex;align-items:center;gap:12px;z-index:20;}
+.hud button{width:38px;height:38px;border-radius:9px;background:var(--panel);border:1px solid var(--line2);color:var(--text);font-size:18px;cursor:pointer;}
+.hud button:hover{border-color:var(--acc);}
+#count{font:600 13px var(--mono);color:var(--t3);min-width:46px;text-align:center;}
+.dots{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);display:flex;gap:7px;z-index:20;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--line2);cursor:pointer;}
+.dot.on{background:var(--acc);width:20px;border-radius:4px;}
+</style>
+</head>
+<body>
+<div id="deck">
+
+<section class="slide"><div class="grid"></div>
+  <div class="brand"><span class="mark"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z" fill="#0a0b0e" fill-opacity=".25" stroke="#0a0b0e" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.5 12.2l2.3 2.3 4.6-4.8" stroke="#0a0b0e" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><div class="wm">sentinelCYBER</div><div class="tag">autonomous security agent</div></div></div>
+  <h1>One fix protects <span class="g">every app</span> at once.</h1>
+  <div class="lead">When a shared library has a security hole, every app that depends on it is exposed. sentinelCYBER catches the live attacks, writes a verified patch, and opens a real pull request — hardening the library for the whole fleet.</div>
+  <div class="foot">Cyberdefense Hackathon · ClickHouse · Akash · Guild · Semgrep</div>
+</section>
+
+<section class="slide"><div class="grid"></div>
+  <div class="ey"><span class="n">01</span> The problem</div>
+  <h2>A library maintainer is <span style="color:var(--red)">blind</span>.</h2>
+  <div class="lead">They can't see how their code is used in the wild, or that it's under attack, until it's already a headline. One hole in a shared dependency exposes thousands of apps at once — Log4Shell, the XZ backdoor, the npm worms. By the time anyone notices, the damage is done.</div>
+</section>
+
+<section class="slide"><div class="grid"></div>
+  <div class="ey"><span class="n">02</span> The idea</div>
+  <h2>Give the library a feedback loop.</h2>
+  <div class="lead">A <b style="color:var(--text)">scout</b> inside every app reports real usage and attacks back to HQ. When the fleet gets hit, an autonomous agent hardens the <b style="color:var(--text)">library itself</b> — so a single change protects every dependent.</div>
+  <div class="flow"><b>attack</b><span class="ar">→</span><b>scouts report</b><span class="ar">→</span><b>ClickHouse</b><span class="ar">→</span><b>agent writes fix</b><span class="ar">→</span><b>self-verify</b><span class="ar">→</span><b>PR + deploy</b></div>
+</section>
+
+<section class="slide" style="align-items:center;text-align:center;"><div class="grid"></div>
+  <div class="ey" style="justify-content:center;"><span class="n">03</span> Live</div>
+  <img class="shot" src="docs/sentinelcyber.gif" alt="attack to protected"/>
+  <div class="sub" style="text-align:center;">Attack the fleet — credentials leak (red). Harden once — every app is protected (green).</div>
+</section>
+
+<section class="slide"><div class="grid"></div>
+  <div class="ey"><span class="n">04</span> Before / after</div>
+  <div class="two">
+    <div><img src="docs/console-attack.png" alt="leaking"/><div class="cap r">SSRF leaking across 3 apps</div></div>
+    <div><img src="docs/console-hardened.png" alt="hardened"/><div class="cap g">all blocked at the library</div></div>
+  </div>
+  <div class="sub" style="text-align:center;margin:3vh auto 0;">None of the apps changed a line of their own code.</div>
+</section>
+
+<section class="slide"><div class="grid"></div>
+  <div class="ey"><span class="n">05</span> The agent</div>
+  <h2 style="margin-bottom:6px;">It never ships a fix it hasn't tested.</h2>
+  <div class="steps">
+    <div class="step"><span class="i">1</span><div><div class="nm">Read the attack signal</div><div class="d">Aggregated SSRF evidence from ClickHouse</div></div></div>
+    <div class="step"><span class="i">2</span><div><div class="nm">Write a hardened guard</div><div class="d">Generated on an open model (Llama-3.3-70B) via Akash</div></div></div>
+    <div class="step"><span class="i">3</span><div><div class="nm">Self-verify in a sandbox</div><div class="d">Proves it blocks the attacks AND allows legit URLs — or it's rejected</div></div></div>
+    <div class="step"><span class="i">4</span><div><div class="nm">Open a real pull request</div><div class="d">On GitHub, citing the evidence — a human merges</div></div></div>
+    <div class="step"><span class="i">5</span><div><div class="nm">Hot-deploy + re-attack</div><div class="d">Confirms every attack is now blocked</div></div></div>
+  </div>
+</section>
+
+<section class="slide"><div class="grid"></div>
+  <div class="ey"><span class="n">06</span> Proof it's real</div>
+  <div class="cards">
+    <div class="card"><div class="k">CLICKHOUSE</div><div class="v">The live, high-volume <b>attack signal</b> every scout reports into.</div></div>
+    <div class="card"><div class="k">AKASH</div><div class="v">Generates the fix on an <b>open model</b>; also hosts the demo (SDL).</div></div>
+    <div class="card"><div class="k">GUILD</div><div class="v">The hardening agent is <b>hosted and runs</b> on Guild.</div></div>
+    <div class="card"><div class="k">SEMGREP</div><div class="v">Caught a real <b>SSRF bypass</b> (127.1) in AI-generated code.</div></div>
+  </div>
+  <div class="sub">Every pull request on the repo was opened autonomously, from live evidence, passing CI.</div>
+</section>
+
+<section class="slide"><div class="grid"></div>
+  <div class="ey"><span class="n">07</span> Where it goes</div>
+  <h2>Fix once. Protect everyone.</h2>
+  <div class="lead">Today it's 3 apps in a demo. In the real world it's the thousands of apps that depend on one library — and that live risk signal is something a cyber-insurer could price. sentinelCYBER turns a library's blind spot into a feedback loop.</div>
+  <div class="sponsors"><span><b>ClickHouse</b></span><span><b>Akash</b></span><span><b>Guild</b></span><span><b>Semgrep</b></span></div>
+</section>
+
+<section class="slide" style="align-items:center;text-align:center;"><div class="grid"></div>
+  <div class="brand" style="justify-content:center;"><span class="mark"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z" fill="#0a0b0e" fill-opacity=".25" stroke="#0a0b0e" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.5 12.2l2.3 2.3 4.6-4.8" stroke="#0a0b0e" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="wm">sentinelCYBER</div></div>
+  <div class="quote">A library's blind spot, turned into a <span class="g">feedback loop</span>.</div>
+  <div class="sub" style="margin:3vh auto 0;">github.com/KabirKoratkar/sentinelCYBER</div>
+</section>
+
+</div>
+<div class="hud"><button onclick="go(-1)">‹</button><span id="count"></span><button onclick="go(1)">›</button></div>
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+let i=0;
+const dots=document.createElement('div');dots.className='dots';
+slides.forEach((_,k)=>{const d=document.createElement('span');d.className='dot';d.onclick=()=>show(k);dots.appendChild(d);});
+document.body.appendChild(dots);
+function show(n){i=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  [...dots.children].forEach((d,k)=>d.classList.toggle('on',k===i));
+  document.getElementById('count').textContent=(i+1)+' / '+slides.length;
+  location.hash=i+1;
+}
+function go(d){show(i+d);}
+addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(1);}
+  if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(-1);}
+  if(e.key==='Home')show(0); if(e.key==='End')show(slides.length-1);
+  if(e.key==='f'||e.key==='F'){document.documentElement.requestFullscreen?.();}
+});
+addEventListener('click',e=>{if(e.target.closest('.hud,.dots'))return; if(e.clientX>innerWidth*0.4)go(1);else go(-1);});
+let _h=0;addEventListener('hashchange',()=>{const n=parseInt(location.hash.slice(1))-1;if(n!==i&&!isNaN(n))show(n);});
+show(parseInt(location.hash.slice(1))-1||0);
+</script>
+</body>
+</html>
