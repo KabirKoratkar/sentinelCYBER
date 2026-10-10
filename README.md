@@ -2,9 +2,9 @@
 
 # 🛡️ sentinelCYBER
 
-### Fleet telemetry hardens a shared library for every app at once.
+### One app surfaces the issue. Every app gets the fix.
 
-When a library has a vulnerability, its maintainer is blind — they can't see how it's used in the wild, or that it's under attack, until it's a headline. **sentinelCYBER closes that loop.**
+When a library has a vulnerability, its maintainer is blind — they can't see how it's used in the wild, or that it's under attack, until it's a headline. **sentinelCYBER closes that loop:** the moment a *single* app that uses the library shows a potential issue, the fix is written into the library itself — protecting every other app that depends on it, including the ones never touched.
 
 <br/>
 
@@ -24,13 +24,15 @@ When a library has a vulnerability, its maintainer is blind — they can't see h
 
 ## The idea
 
-Three apps depend on the same `linkpreview` library. A **scout** inside each app reports every call and attack back to HQ. When the fleet gets hit, an **autonomous agent** reads the aggregated signal, writes a hardened fix for the **library itself**, verifies it in a sandbox, opens a pull request, and hot-deploys it.
+Many apps depend on the same `linkpreview` library. A **scout** inside each app reports every call and attack back to HQ. **The moment one app's traffic surfaces a potential issue** — an attack, a misuse, a dangerous input — an **autonomous agent** reads that signal, writes a hardened fix for the **library itself**, verifies it in a sandbox, opens a pull request, and hot-deploys it.
+
+Because the fix lands in the shared library, **every dependent is protected at once** — not just the app that was attacked, but every other app that could have been hit by the same flaw. One app's signal becomes everyone's patch.
 
 ```
-attack ──▶ 3 apps (share one linkpreview library) + scouts
-       ──▶ HQ collector ──▶ ClickHouse            (live attack signal)
+one app is attacked ──▶ its scout reports ──▶ ClickHouse      (live signal)
        ──▶ HQ agent: write fix (Akash) ──▶ self-verify ──▶ PR (GitHub) ──▶ deploy
-       ──▶ re-attack: all blocked.  No app changed a line of its own code.
+       ──▶ the library is hardened ──▶ EVERY dependent is protected,
+           including the apps that were never touched.
 ```
 
 <br/>
